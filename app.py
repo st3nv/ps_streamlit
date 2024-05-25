@@ -426,9 +426,62 @@ if uploaded_file:
         plt.ylabel('Reaction Time')
         st.pyplot(fig)
         
+    toc.h2("5. Vividness with Performance")
+    
+    vivid_cnt = df_parsed['vivid_response'].value_counts().reset_index()
+    st.write("Vivid Response count")
+    st.dataframe(vivid_cnt)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        toc.h3("Accuracy")
+        vivid_acc = df_parsed.groupby('vivid_response')['corr'].agg([ 'mean', 'std']).reset_index().rename(columns={'mean': 'accuracy'})
+        vivid_acc['vivid_response'] = vivid_acc['vivid_response'].astype(int)
+        vivid_acc_full = pd.DataFrame({'vivid_response': [1, 2, 3, 4]})
+        vivid_acc = pd.merge(vivid_acc_full, vivid_acc, on='vivid_response', how='left')
+        st.dataframe(vivid_acc)
+        
+        fig, ax = plt.subplots(figsize=(6, 4), dpi=200)
+        sns.barplot(x='vivid_response', y='accuracy', data=vivid_acc, ax=ax, palette=color_p)
+        plt.ylim(0, 1)
+        # Add "X" markers for missing values
+        for i, acc in enumerate(vivid_acc['accuracy']):
+            if pd.isna(acc):
+                x_coord = i
+                y_coord = 0.5
+                plt.text(x_coord, y_coord, 'X', ha='center', va='center', fontsize=14, color='black')
+        
+        # Set labels and title
+        plt.xlabel('Vivid Response')
+        plt.ylabel('Accuracy')
+        st.pyplot(fig)
+    
+    with col2:
+        toc.h3("Reaction Time")
+        vivid_rt = df_parsed.groupby('vivid_response')['rt'].agg([ 'mean', 'std']).reset_index().rename(columns={'mean': 'rt_mean'})
+        vivid_rt['vivid_response'] = vivid_rt['vivid_response'].astype(int)
+        vivid_rt_full = pd.DataFrame({'vivid_response': [1, 2, 3, 4]})
+        vivid_rt = pd.merge(vivid_rt_full, vivid_rt, on='vivid_response', how='left')
+        st.dataframe(vivid_rt)
+        
+        fig, ax = plt.subplots(figsize=(6, 4), dpi=200)
+        sns.barplot(x='vivid_response', y='rt_mean', data=vivid_rt, ax=ax, palette=color_p)
+        # Add "X" markers for missing values
+        for i, rt in enumerate(vivid_rt['rt_mean']):
+            if pd.isna(rt):
+                x_coord = i
+                y_coord = 1
+                plt.text(x_coord, y_coord, 'X', ha='center', va='center', fontsize=14, color='black')
+
+        # Set labels and title
+        plt.xlabel('Vivid Response')
+        plt.ylabel('Reaction Time')
+        st.pyplot(fig)
+    
         
     # More analysis on your choice
-    toc.h2("5. More Analysis by Yourself.")
+    toc.h2("6. More Analysis by Yourself.")
     st.write("If you want to do more analysis, you can select the columns to group by, columns to aggregate and the aggregate function.")
     st.write("By default it's showing the accuracy grouped by block.")
     # Sidebar for user input
