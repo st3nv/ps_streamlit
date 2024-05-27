@@ -340,7 +340,7 @@ if uploaded_file:
             block_idx = df_parsed[df_parsed['block'] == block]['idx']
             ax.axvspan(block_idx.min(), block_idx.max(), alpha=0.1, color=color_p[idx])
             # add block label in the bottom
-            ax.text(block_idx.mean(), 0.015, block, ha='center', va='center', fontsize=8, color='black')
+            ax.text(block_idx.mean(), df_parsed['running_avg_acc'].min(), block, ha='center', va='center', fontsize=8, color='black')
             
         # change the labels font size
         ax.set_xlabel('Index', fontsize=14)
@@ -361,7 +361,7 @@ if uploaded_file:
             block_idx = df_parsed[df_parsed['block'] == block]['idx']
             ax.axvspan(block_idx.min(), block_idx.max(), alpha=0.1, color=color_p[idx])
             # add block label in the bottom
-            ax.text(block_idx.mean(), 1.3, block, ha='center', va='center', fontsize=8, color='black')
+            ax.text(block_idx.mean(), df_parsed['running_avg_rt'].min(), block, ha='center', va='center', fontsize=8, color='black')
         # change the labels font size
         ax.set_xlabel('Index', fontsize=14)
         ax.set_ylabel('Running Average Reaction Time', fontsize=14)
